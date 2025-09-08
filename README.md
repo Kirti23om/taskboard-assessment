@@ -41,10 +41,12 @@ todo-app/
 
 2. **Environment setup:**
    ```bash
-   # Copy environment template
+   # Copy environment template to all locations
    cp env.example .env
+   cp env.example backend/.env
+   cp env.example frontend/.env
    
-   # Edit .env with your JWT secret
+   # Edit .env files with your JWT secret (all files should be identical)
    ```
 
 3. **Database setup:**

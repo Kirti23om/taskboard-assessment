@@ -34,19 +34,28 @@ npm install
 # Go back to root
 cd ..
 
-# Copy environment file
+# Copy environment files
+echo "📝 Setting up environment files..."
 if [ ! -f .env ]; then
-    echo "📝 Creating environment file..."
     cp env.example .env
-    echo "✅ Environment file created. Please update .env with your settings."
+    echo "✅ Root environment file created."
 fi
 
-# Setup database
+if [ ! -f backend/.env ]; then
+    cp env.example backend/.env
+    echo "✅ Backend environment file created."
+fi
+
+if [ ! -f frontend/.env ]; then
+    cp env.example frontend/.env
+    echo "✅ Frontend environment file created."
+fi
+
+echo "✅ All environment files created. Please update .env files with your settings if needed."
+
+# Setup database first
 echo "🗄️ Setting up database..."
-cd backend
-npx prisma generate
-npx prisma migrate dev --name init
-npx ts-node prisma/seed.ts
+npm run db:setup
 
 echo "✅ Database setup complete!"
 
