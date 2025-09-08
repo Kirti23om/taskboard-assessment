@@ -1,24 +1,22 @@
 {
-  "name": "taskboard-assessment",
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Full-stack Todo application with Next.js and NestJS",
   "private": true,
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "test:api": "turbo run test --filter=api",
-    "test:ui": "turbo run test:e2e --filter=web"
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run dev\"",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build",
+    "test:backend": "cd backend && npm run test:all",
+    "test:frontend": "cd frontend && npm run test:e2e",
+    "test:all": "npm run test:backend && npm run test:frontend",
+    "setup": "npm run install:all && npm run db:setup",
+    "db:setup": "cd backend && npx prisma migrate dev && npx ts-node prisma/seed.ts",
+    "db:reset": "cd backend && npx prisma migrate reset --force && npx ts-node prisma/seed.ts",
+    "prisma:migrate:dev": "cd backend && npx prisma migrate dev",
+    "prisma:seed": "cd backend && npx ts-node prisma/seed.ts"
   },
   "devDependencies": {
-    "@turbo/gen": "^1.10.12",
-    "turbo": "^1.10.12"
-  },
-  "packageManager": "pnpm@8.15.6",
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.15.0",
-    "pnpm": "^10.15.1"
+    "concurrently": "^8.2.2"
   }
 }
