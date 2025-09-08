@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   // ADMIN or TESTER
+  createdAt    DateTime @default(now())
+
+  @@map("users")
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  tasks     Task[]
+
+  @@map("projects")
+}
+
+model Task {
+  id            String    @id @default(cuid())
+  projectId     String
+  title         String
+  status        String    @default("todo") // todo, in_progress, done
+  priority      String    @default("med")  // low, med, high
+  assigneeEmail String?
+  dueDate       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  activities  ActivityLog[]
+
+  @@map("tasks")
+}
+
+model ActivityLog {
+  id     String   @id @default(cuid())
+  taskId String
+  type   String   // create, update, delete
+  ts     DateTime @default(now())
+  by     String
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("activity_logs")
+}
