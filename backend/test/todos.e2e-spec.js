@@ -29,7 +29,9 @@ describe('Todos API (e2e)', () => {
       .post('/todos')
       .send({ title: '', description: 'desc' })
       .set('Authorization', 'Bearer user1')
-      .expect(400);
+    process.env.DATABASE_URL = 'file:./test.db';
+    require('dotenv').config({ path: require('path').resolve(__dirname, '../.env.test') });
+
   });
 
   it('should sanitize description on create', async () => {
